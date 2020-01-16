@@ -1,58 +1,51 @@
-Using Fermilab account
-
+USING FERMILAB ACCOUNT
 For authentication:
-kinit yourusername@FNAL.GOV
+	kinit yourusername@FNAL.GOV
 Check that it works:
-klist
+	klist
 Log into a dunegpv machine (7 is a random machine number):
-ssh -XY yourusername@dunegpvm07.fnal.gov
+	ssh -XY yourusername@dunegpvm07.fnal.gov
 You have two workspaces:
-/dune/app/users/yourusername/
+	/dune/app/users/yourusername/
 
-Getting rid of the login errors on dunegpvm machines (thanks to John):
-
+GETTING RID OF LOGIN ERRORS ON DUNEGPVM MACHINES (thanks to John)
 Create the following file in your home directory on your Warwick machine:
-~/.ssh/config 
+	~/.ssh/config 
 The file should containing the following lines:
-Host *.fnal.gov
- 	     ForwardAgent yesÂ Â 
-  ForwardX11 yes
-               ForwardX11Trusted yes
-               GSSAPIAuthentication yes
-               GSSAPIDelegateCredentials yes
+	Host *.fnal.gov
+ 	  ForwardAgent yes
+          ForwardX11 yes
+          ForwardX11Trusted yes
+          GSSAPIAuthentication yes
+          GSSAPIDelegateCredentials yes
 
-Setup DUNE
-
+SETUP DUNE
 Source dune setup script:
-source /cvmfs/dune.opensciencegrid.org/products/dune/setup_dune.sh
+	source /cvmfs/dune.opensciencegrid.org/products/dune/setup_dune.sh
 Get a list of all dunetpc versions:
-ups list -aK+ dunetpc
+	ups list -aK+ dunetpc
 Choose one version and set it up:
-setup dunetpc v08_39_00 -q e19:prof
+	setup dunetpc v08_39_00 -q e19:prof
 
-Finding .fcl files
-
+FINDINF .FCL FILES:
 .fcl files are located in $DUNETPC_DIR/job and $LARSIM_DIR/job
-
 Example of .fcl file to generate neutrino events in DUNE FD:
-/cvmfs/dune.opensciencegrid.org/products/dune/dunetpc/v08_39_00/job/prodgenie_nu_dune10kt.fcl
-
+	/cvmfs/dune.opensciencegrid.org/products/dune/dunetpc/v08_39_00/job/prodgenie_nu_dune10kt.fcl
 Follow the chain of included .fcl files, e.g.:
-Prodgenie_common_dunefd.fcl
-Genie_dune.fcl		
-
+	Prodgenie_common_dunefd.fcl
+	Genie_dune.fcl		
 Very little script to find .fcl files:
-#!/bin/sh
-echo "Have you setup dune before running this?."
-echo "Searching for "$1"..."
-find $DUNETPC_DIR -name $1
-find $LARSIM_DIR -name $1
+	#!/bin/sh
+	echo "Have you setup dune before running this?."
+	echo "Searching for "$1"..."
+	find $DUNETPC_DIR -name $1
+	find $LARSIM_DIR -name $1
 Execute it as:
-./pathtoscript.sh nameoffclfile.fcl
+	./pathtoscript.sh nameoffclfile.fcl
 If you don’t want to have to type in the path every time, open:
-$HOME/.bashrc
+	$HOME/.bashrc
 And put in it the line:
-alias findfcl=$HOME/findfcl.sh
+	alias findfcl=$HOME/findfcl.sh
 Then source the file for the alias to be immediately available.
 To use it, just do:
 	findfcl nameoffclfile.fcl
@@ -60,11 +53,11 @@ To use it, just do:
 Generating N events with GENIE
 
 You have to kinit again, this time from within the fnal account, to get permissions to access the flux files:
-kinit yourusername@FNAL.GOV
+	kinit yourusername@FNAL.GOV
 Check that kinit worked:
-klist
+	klist
 To get access to the flux files you have to also use the additional command:
-kx509
+	kx509
 To start the generation:
-lar -c prodgenie_nu_dune10kt.fcl -n 10
+	lar -c prodgenie_nu_dune10kt.fcl -n 10
 scp the output .root file to your Warwick machine
