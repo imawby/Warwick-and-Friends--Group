@@ -1,261 +1,70 @@
-{\rtf1\ansi\ansicpg1252\cocoartf1671\cocoasubrtf500
-{\fonttbl\f0\fswiss\fcharset0 Arial-BoldMT;\f1\froman\fcharset0 Times-Roman;\f2\fswiss\fcharset0 ArialMT;
-}
-{\colortbl;\red255\green255\blue255;\red0\green0\blue0;\red16\green60\blue192;\red22\green21\blue22;
-\red83\green83\blue83;}
-{\*\expandedcolortbl;;\cssrgb\c0\c0\c0;\cssrgb\c6667\c33333\c80000;\cssrgb\c11373\c10980\c11373;
-\cssrgb\c40000\c40000\c40000;}
-\paperw11900\paperh16840\margl1440\margr1440\vieww10800\viewh8400\viewkind0
-\deftab720
-\pard\pardeftab720\sl340\partightenfactor0
+Using Fermilab account
 
-\f0\b\fs29\fsmilli14667 \cf2 \expnd0\expndtw0\kerning0
-\outl0\strokewidth0 \strokec2 Using Fermilab account
-\f1\b0\fs24 \
-\pard\pardeftab720\sl280\partightenfactor0
-\cf2 \
-\pard\pardeftab720\sl340\partightenfactor0
+For authentication:
+kinit yourusername@FNAL.GOV
+Check that it works:
+klist
+Log into a dunegpv machine (7 is a random machine number):
+ssh -XY yourusername@dunegpvm07.fnal.gov
+You have two workspaces:
+/dune/app/users/yourusername/
 
-\f2\fs29\fsmilli14667 \cf2 For authentication:
-\f1\fs24 \
-\pard\pardeftab720\fi960\sl340\partightenfactor0
+Getting rid of the login errors on dunegpvm machines (thanks to John):
 
-\f2\fs29\fsmilli14667 \cf2 kinit yourusername{\field{\*\fldinst{HYPERLINK "mailto:mbrunett@FNAL.GOV"}}{\fldrslt \cf3 \ul \ulc3 \strokec3 @FNAL.GOV}}
-\f1\fs24 \
-\pard\pardeftab720\sl340\partightenfactor0
+Create the following file in your home directory on your Warwick machine:
+~/.ssh/config 
+The file should containing the following lines:
+Host *.fnal.gov
+ 	     ForwardAgent yesÂ Â 
+  ForwardX11 yes
+               ForwardX11Trusted yes
+               GSSAPIAuthentication yes
+               GSSAPIDelegateCredentials yes
 
-\f2\fs29\fsmilli14667 \cf2 Check that it works:
-\f1\fs24 \
-\pard\pardeftab720\fi960\sl340\partightenfactor0
+Setup DUNE
 
-\f2\fs29\fsmilli14667 \cf2 klist
-\f1\fs24 \
-\pard\pardeftab720\sl340\partightenfactor0
+Source dune setup script:
+source /cvmfs/dune.opensciencegrid.org/products/dune/setup_dune.sh
+Get a list of all dunetpc versions:
+ups list -aK+ dunetpc
+Choose one version and set it up:
+setup dunetpc v08_39_00 -q e19:prof
 
-\f2\fs29\fsmilli14667 \cf2 Log into a dunegpv machine (7 is a random machine number):
-\f1\fs24 \
-\pard\pardeftab720\fi960\sl340\partightenfactor0
+Finding .fcl files
 
-\f2\fs29\fsmilli14667 \cf2 ssh -XY yourusername{\field{\*\fldinst{HYPERLINK "mailto:mbrunett@dunegpvm07.fnal.gov"}}{\fldrslt \cf3 \ul \ulc3 \strokec3 @dunegpvm07.fnal.gov}}
-\f1\fs24 \
-\pard\pardeftab720\sl340\partightenfactor0
+.fcl files are located in $DUNETPC_DIR/job and $LARSIM_DIR/job
 
-\f2\fs29\fsmilli14667 \cf2 You have two workspaces:
-\f1\fs24 \
-\pard\pardeftab720\fi960\sl340\partightenfactor0
+Example of .fcl file to generate neutrino events in DUNE FD:
+/cvmfs/dune.opensciencegrid.org/products/dune/dunetpc/v08_39_00/job/prodgenie_nu_dune10kt.fcl
 
-\f2\fs29\fsmilli14667 \cf2 /dune/app/users/yourusername/
-\f1\fs24 \
-\pard\pardeftab720\sl280\partightenfactor0
-\cf2 \
-\pard\pardeftab720\sl360\partightenfactor0
+Follow the chain of included .fcl files, e.g.:
+Prodgenie_common_dunefd.fcl
+Genie_dune.fcl		
 
-\f0\b\fs30\fsmilli15333 \cf4 \strokec4 Getting rid of the login errors on dunegpvm machines (thanks to John):
-\f1\b0\fs24 \cf2 \strokec2 \
-\pard\pardeftab720\sl280\partightenfactor0
-\cf2 \
-\pard\pardeftab720\sl360\partightenfactor0
+Very little script to find .fcl files:
+#!/bin/sh
+echo "Have you setup dune before running this?."
+echo "Searching for "$1"..."
+find $DUNETPC_DIR -name $1
+find $LARSIM_DIR -name $1
+Execute it as:
+./pathtoscript.sh nameoffclfile.fcl
+If you don’t want to have to type in the path every time, open:
+$HOME/.bashrc
+And put in it the line:
+alias findfcl=$HOME/findfcl.sh
+Then source the file for the alias to be immediately available.
+To use it, just do:
+	findfcl nameoffclfile.fcl
 
-\f2\fs30\fsmilli15333 \cf4 \strokec4 Create the following file in your home directory on your Warwick machine:
-\f1\fs24 \cf2 \strokec2 \
-\pard\pardeftab720\fi960\sl360\partightenfactor0
+Generating N events with GENIE
 
-\f2\fs30\fsmilli15333 \cf4 \strokec4 ~/.ssh/config\'a0
-\f1\fs24 \cf2 \strokec2 \
-\pard\pardeftab720\sl360\partightenfactor0
-
-\f2\fs30\fsmilli15333 \cf4 \strokec4 The file should containing the following lines:
-\f1\fs24 \cf2 \strokec2 \
-\pard\pardeftab720\fi960\sl360\partightenfactor0
-
-\f2\fs26\fsmilli13333 \cf4 \strokec4 Host *.fnal.gov
-\f1\fs24 \cf2 \strokec2 \
-\pard\pardeftab720\sl360\partightenfactor0
-
-\f2\fs26\fsmilli13333 \cf4 \strokec4 \'a0	     ForwardAgent yes\'c2\'a0\'c2\'a0
-\f1\fs24 \cf2 \strokec2 \
-\pard\pardeftab720\fi960\sl360\partightenfactor0
-
-\f2\fs26\fsmilli13333 \cf4 \strokec4   ForwardX11 yes
-\f1\fs24 \cf2 \strokec2 \
-\pard\pardeftab720\sl360\partightenfactor0
-
-\f2\fs26\fsmilli13333 \cf4 \strokec4                ForwardX11Trusted yes
-\f1\fs24 \cf2 \strokec2 \
-
-\f2\fs26\fsmilli13333 \cf4 \strokec4                GSSAPIAuthentication yes
-\f1\fs24 \cf2 \strokec2 \
-
-\f2\fs26\fsmilli13333 \cf4 \strokec4                GSSAPIDelegateCredentials yes
-\f1\fs24 \cf2 \strokec2 \
-\pard\pardeftab720\sl280\partightenfactor0
-\cf2 \
-\pard\pardeftab720\sl340\partightenfactor0
-
-\f0\b\fs29\fsmilli14667 \cf2 Setup DUNE
-\f1\b0\fs24 \
-\pard\pardeftab720\sl280\partightenfactor0
-\cf2 \
-\pard\pardeftab720\sl340\partightenfactor0
-
-\f2\fs29\fsmilli14667 \cf2 Source dune setup script:
-\f1\fs24 \
-\pard\pardeftab720\fi960\sl340\partightenfactor0
-
-\f2\fs29\fsmilli14667 \cf2 source /cvmfs/dune.opensciencegrid.org/products/dune/setup_dune.sh
-\f1\fs24 \
-\pard\pardeftab720\sl340\partightenfactor0
-
-\f2\fs29\fsmilli14667 \cf2 Get a list of all dunetpc versions:
-\f1\fs24 \
-\pard\pardeftab720\fi960\sl340\partightenfactor0
-
-\f2\fs29\fsmilli14667 \cf2 ups list -aK+ dunetpc
-\f1\fs24 \
-\pard\pardeftab720\sl340\partightenfactor0
-
-\f2\fs29\fsmilli14667 \cf2 Choose one version and set it up:
-\f1\fs24 \
-\pard\pardeftab720\fi960\sl340\partightenfactor0
-
-\f2\fs29\fsmilli14667 \cf2 setup dunetpc v08_39_00 -q e19:prof
-\f1\fs24 \
-\pard\pardeftab720\sl280\partightenfactor0
-\cf2 \
-\pard\pardeftab720\sl340\partightenfactor0
-
-\f0\b\fs29\fsmilli14667 \cf2 Finding .fcl files
-\f1\b0\fs24 \
-\pard\pardeftab720\sl280\partightenfactor0
-\cf2 \
-\pard\pardeftab720\sl340\partightenfactor0
-
-\f2\fs29\fsmilli14667 \cf2 .fcl files are located in $DUNETPC_DIR/job and $LARSIM_DIR/job
-\f1\fs24 \
-\pard\pardeftab720\sl280\partightenfactor0
-\cf2 \
-\pard\pardeftab720\sl340\partightenfactor0
-
-\f2\fs29\fsmilli14667 \cf2 Example of .fcl file to generate neutrino events in DUNE FD:
-\f1\fs24 \
-\pard\pardeftab720\fi960\sl340\partightenfactor0
-
-\f2\fs29\fsmilli14667 \cf2 /cvmfs/dune.opensciencegrid.org/products/dune/dunetpc/v08_39_00/job/prodgenie_nu_dune10kt.fcl
-\f1\fs24 \
-\pard\pardeftab720\sl280\partightenfactor0
-\cf2 \
-\pard\pardeftab720\sl340\partightenfactor0
-
-\f2\fs29\fsmilli14667 \cf2 Follow the chain of included .fcl files, e.g.:
-\f1\fs24 \
-\pard\pardeftab720\fi960\sl340\partightenfactor0
-
-\f2\fs29\fsmilli14667 \cf2 Prodgenie_common_dunefd.fcl
-\f1\fs24 \
-
-\f2\fs29\fsmilli14667 Genie_dune.fcl		
-\f1\fs24 \
-\pard\pardeftab720\sl280\partightenfactor0
-\cf2 \
-\pard\pardeftab720\sl340\partightenfactor0
-
-\f2\fs29\fsmilli14667 \cf2 Very little script to find .fcl files:
-\f1\fs24 \
-\pard\pardeftab720\fi960\sl280\partightenfactor0
-
-\f2 \cf5 \strokec5 #!/bin/sh
-\f1 \cf2 \strokec2 \
-
-\f2 \cf5 \strokec5 echo "Have you setup dune before running this?."
-\f1 \cf2 \strokec2 \
-
-\f2 \cf5 \strokec5 echo "Searching for "$1"..."
-\f1 \cf2 \strokec2 \
-
-\f2 \cf5 \strokec5 find $DUNETPC_DIR -name $1
-\f1 \cf2 \strokec2 \
-
-\f2 \cf5 \strokec5 find $LARSIM_DIR -name $1
-\f1 \cf2 \strokec2 \
-\pard\pardeftab720\sl340\partightenfactor0
-
-\f2\fs29\fsmilli14667 \cf2 Execute it as:
-\f1\fs24 \
-\pard\pardeftab720\fi960\sl340\partightenfactor0
-
-\f2\fs29\fsmilli14667 \cf5 \strokec5 ./pathtoscript.sh nameoffclfile.fcl
-\f1\fs24 \cf2 \strokec2 \
-\pard\pardeftab720\sl340\partightenfactor0
-
-\f2\fs29\fsmilli14667 \cf2 If you don\'92t want to have to type in the path every time, open:
-\f1\fs24 \
-\pard\pardeftab720\li960\sl340\partightenfactor0
-
-\f2\fs29\fsmilli14667 \cf5 \strokec5 $HOME/.bashrc
-\f1\fs24 \cf2 \strokec2 \
-\pard\pardeftab720\sl340\partightenfactor0
-
-\f2\fs29\fsmilli14667 \cf2 And put in it the line:
-\f1\fs24 \
-\pard\pardeftab720\fi960\sl340\partightenfactor0
-
-\f2\fs29\fsmilli14667 \cf5 \strokec5 alias findfcl=$HOME/findfcl.sh
-\f1\fs24 \cf2 \strokec2 \
-\pard\pardeftab720\sl340\partightenfactor0
-
-\f2\fs29\fsmilli14667 \cf2 Then source the file for the alias to be immediately available.
-\f1\fs24 \
-
-\f2\fs29\fsmilli14667 To use it, just do:
-\f1\fs24 \
-
-\f2\fs29\fsmilli14667 	\cf5 \strokec5 findfcl nameoffclfile.fcl
-\f1\fs24 \cf2 \strokec2 \
-\pard\pardeftab720\sl280\partightenfactor0
-\cf2 \
-\pard\pardeftab720\sl340\partightenfactor0
-
-\f0\b\fs29\fsmilli14667 \cf2 Generating N events with GENIE
-\f1\b0\fs24 \
-\pard\pardeftab720\sl280\partightenfactor0
-\cf2 \
-\pard\pardeftab720\sl340\partightenfactor0
-
-\f2\fs29\fsmilli14667 \cf2 You have to kinit again, this time from within the fnal account, to get permissions to access the flux files:
-\f1\fs24 \
-\pard\pardeftab720\fi960\sl340\partightenfactor0
-
-\f2\fs29\fsmilli14667 \cf2 kinit yourusername{\field{\*\fldinst{HYPERLINK "mailto:mbrunett@FNAL.GOV"}}{\fldrslt \cf3 \ul \ulc3 \strokec3 @FNAL.GOV}}
-\f1\fs24 \
-\pard\pardeftab720\sl340\partightenfactor0
-
-\f2\fs29\fsmilli14667 \cf2 Check that kinit worked:
-\f1\fs24 \
-\pard\pardeftab720\fi960\sl340\partightenfactor0
-
-\f2\fs29\fsmilli14667 \cf2 klist
-\f1\fs24 \
-\pard\pardeftab720\sl340\partightenfactor0
-
-\f2\fs29\fsmilli14667 \cf2 To get access to the flux files you have to also use the additional command:
-\f1\fs24 \
-\pard\pardeftab720\fi960\sl340\partightenfactor0
-
-\f2\fs29\fsmilli14667 \cf2 kx509
-\f1\fs24 \
-\pard\pardeftab720\sl340\partightenfactor0
-
-\f2\fs29\fsmilli14667 \cf2 To start the generation:
-\f1\fs24 \
-\pard\pardeftab720\fi960\sl340\partightenfactor0
-
-\f2\fs29\fsmilli14667 \cf2 lar -c prodgenie_nu_dune10kt.fcl -n 10
-\f1\fs24 \
-\pard\pardeftab720\sl340\partightenfactor0
-
-\f2\fs29\fsmilli14667 \cf2 scp the output .root file to your Warwick machine
-\f1\fs24 \
-\pard\pardeftab720\sl280\partightenfactor0
-\cf2 \
-\
-}
+You have to kinit again, this time from within the fnal account, to get permissions to access the flux files:
+kinit yourusername@FNAL.GOV
+Check that kinit worked:
+klist
+To get access to the flux files you have to also use the additional command:
+kx509
+To start the generation:
+lar -c prodgenie_nu_dune10kt.fcl -n 10
+scp the output .root file to your Warwick machine
