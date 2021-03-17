@@ -11,7 +11,7 @@
 <!-- Group -->
 <group>dune</group>
 <!-- Project size -->
-<numevents>1</numevents>
+<numevents>500000</numevents>
 <!-- Operating System -->
 <os>SL7</os>
 <!-- Batch resources -->
@@ -44,6 +44,7 @@
   <workdir>&path;/&name;_work_ana</workdir>
   <jobsub>--memory=5000 --expected-lifetime=10h --disk=20GB</jobsub>
   <numjobs>10000</numjobs>
+  <maxfilesperjob>10</maxfilesperjob>
 </stage>
 
 <!-- file type -->
