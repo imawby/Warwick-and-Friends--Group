@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<!DOCTYPE project [
+<!ENTITY file_type "montecarlo">
+<!ENTITY run_type "physics">
+<!ENTITY release "v09_17_01">
+<!ENTITY name "MousamJob">
+<!--ENTITY tag "PartGun"-->
+<!ENTITY path "/pnfs/dune/persistent/users/USERNAME">
+]>
+<project name="&name;">
+<!-- Group -->
+<group>dune</group>
+<!-- Project size -->
+<numevents>250000</numevents>
+<!-- Operating System -->
+<os>SL7</os>
+<!-- Batch resources -->
+<resource>DEDICATED,OPPORTUNISTIC</resource>
+<!-- Larsoft information -->
+<larsoft>
+  <tag>&release;</tag>
+  <qual>e19:prof</qual>
+  <!--local>/pnfs/dune/resilient/users/USERNAME/TARBALLNAME.tar</local-->
+</larsoft>
+<!-- Project stages -->
+<!--stage name="reco">
+  <inputlist>/PATH/TO/INPUT/LIST</inputlist>
+  <inputdef>DEFINITION_NAME</inputdef>
+  <initsource>/path/to/init/source</initsource>
+  <local>/pnfs/dune/resilient/users/USERNAME/TARBALLNAME.tar</local>
+  <fcl>/PATH/TO/RECO/FCL/FILE</fcl>
+  <outdir>&path;/&name;_reco</outdir>
+  <workdir>&path;/&name;_work_reco</workdir>
+  <numjobs>10000</numjobs>
+</stage-->
+
+<stage name="ana">
+  <!--inputlist>/PATH/TO/INPUT/LIST</inputlist-->
+  <inputdef>DEFINITION_NAME</inputdef>
+  <initsource>PATH/TO/INIT/SOURCE</initsource>
+  <!--local>/pnfs/dune/resilient/users/USERNAME/TARBALLNAME.tar</local-->
+  <fcl>/PATH/TO/ANA/FCL/FILE</fcl>
+  <outdir>&path;/&name;_ana</outdir>
+  <workdir>&path;/&name;_work_ana</workdir>
+  <jobsub>--memory=5000 --expected-lifetime=10h --disk=20GB</jobsub>
+  <numjobs>10000</numjobs>
+</stage>
+
+<!-- file type -->
+<filetype>&file_type;</filetype>
+<!-- run type -->
+<runtype>&run_type;</runtype>
+</project>
