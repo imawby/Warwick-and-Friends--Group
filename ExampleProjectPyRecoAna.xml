@@ -11,7 +11,7 @@
 <!-- Group -->
 <group>dune</group>
 <!-- Project size -->
-<numevents>250000</numevents>
+<numevents>1</numevents>
 <!-- Operating System -->
 <os>SL7</os>
 <!-- Batch resources -->
